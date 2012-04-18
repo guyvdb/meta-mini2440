@@ -1,0 +1,27 @@
+From: Huisung Kang <hs1218.kang@samsung.com>
+Subject: [PATCH] ARM: SAMSUNG: Add over sampling preventing code
+
+Multiple calling adc by other device have happend over sampling.
+It can be TS(TouchScreen), in the issue, while the adc is approaching.
+This commit is preventing code for over sampling.
+
+Signed-off-by: Dongsoo Ha <dsfine.ha@samsung.com>
+Signed-off-by: Huisung Kang <hs1218.kang@samsung.com>
+---
+ arch/arm/plat-samsung/adc.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+Index: linux-3.2/arch/arm/plat-samsung/adc.c
+===================================================================
+--- linux-3.2.orig/arch/arm/plat-samsung/adc.c
++++ linux-3.2/arch/arm/plat-samsung/adc.c
+@@ -297,7 +297,8 @@ static irqreturn_t s3c_adc_irq(int irq, 
+ 	data1 = readl(adc->regs + S3C2410_ADCDAT1);
+ 	adc_dbg(adc, "read %d: 0x%04x, 0x%04x\n", client->nr_samples, data0, data1);
+ 
+-	client->nr_samples--;
++	if (client->nr_samples > 0)
++		client->nr_samples--;
+ 
+ 	if (cpu == TYPE_ADCV1 || cpu == TYPE_ADCV11) {
+ 		data0 &= 0x3ff;

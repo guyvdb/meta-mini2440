@@ -1,0 +1,65 @@
+# keep in sync with stable
+patch-3.2.1.bz2
+patch-3.2.1-2.bz2
+patch-3.2.2-3.bz2
+patch-3.2.3-4.bz2
+patch-3.2.4-5.bz2
+patch-3.2.5-6.bz2
+patch-3.2.6-7.bz2
+
+PATCH_1_4_s3c2440_mini2440_Add_support_for_new_LCD_panels.diff
+add_lcd_w35i.diff
+PATCH_2_4_s3c2440_mini2440_Add_touchscreen_support_for_mini2440.diff
+PATCH_3_4_s3c2440_mini2440_Select_touchscreen_by_default.diff
+PATCH_4_4_s3c2440_mini2440_Use_leds-gpio_driver_for_board_leds_handling.diff
+
+# some fixes, occured on LKML/ALKML
+PATCH_2_3_rtc-s3c_Disable_alarm_entries_that_are_not_chosen.diff
+
+# will be part of mainline some time
+dm9000_Make_the_driver_follow_the_IRQF_SHARED_contract.patch
+
+# build time fixes
+# FIXME moved from 'arch/arm/plat-samsung/dev-ts.c' to 'arch/arm/plat-samsung/devs.c'
+# Drop_exporting_s3c24xx_ts_set_platdata.diff
+# FIXME to be re-worked
+# fix_gpio_register.diff
+
+# due to wrong option, mounting NAND is slow
+speed_up_NAND_mounting.diff
+
+# just a little bit pedantic
+make_all_const.diff
+
+# remove unused code in the framebuffer driver
+remove_device_file.diff
+make_debug_decision_const.diff
+just_a_cleanup.diff
+
+# Show something on the screen, even when no graphic console is enabled
+enable_screen_without_console.diff
+
+add_hwmon.diff
+fix_ts_race.diff
+fix_backlight_GPIO_handling.diff
+
+# display size handling can be done perfectly in kernel
+add_display_size_in_kernel.diff
+add_display_sizes_to_mini2440.diff
+
+# the N43i display unit is a known device
+n43i_display_unit.diff
+
+# the 6th button works now
+enable_button_6.diff
+
+# fix generic PWM code
+fix_pwm.diff
+
+# add buzzer as a simple 'input' device
+add_buzzer.diff
+
+SAMSUNG_Add_over_sampling_preventing_code.diff
+
+# odor marker
+set-marker.diff

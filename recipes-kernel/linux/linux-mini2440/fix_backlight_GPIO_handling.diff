@@ -1,0 +1,28 @@
+From: Juergen Beisert <jbe@pengutronix.de>
+Subject: Mini2440: Make the 'backlight' LED work
+
+The generic driver cannot work with GPG(4) to make the backlight switchable,
+as long the platform claims this GPIO.
+
+With this patch the backlight can be switched via:
+
+/sys/devices/platform/leds-gpio.1/leds/backlight/brightness
+
+Signed-off-by: Juergen Beisert <jbe@pengutronix.de>
+
+---
+ arch/arm/mach-s3c2440/mach-mini2440.c |    1 +
+ 1 file changed, 1 insertion(+)
+
+Index: linux-3.2/arch/arm/mach-s3c2440/mach-mini2440.c
+===================================================================
+--- linux-3.2.orig/arch/arm/mach-s3c2440/mach-mini2440.c
++++ linux-3.2/arch/arm/mach-s3c2440/mach-mini2440.c
+@@ -725,6 +725,7 @@ static void __init mini2440_init(void)
+ 	/* Turn the backlight early on */
+ 	WARN_ON(gpio_request(S3C2410_GPG(4), "backlight"));
+ 	gpio_direction_output(S3C2410_GPG(4), 1);
++	gpio_free(S3C2410_GPG(4));
+ 
+ 	/* remove pullup on optional PWM backlight -- unused on 3.5 and 7"s */
+ 	s3c_gpio_setpull(S3C2410_GPB(1), S3C_GPIO_PULL_UP);

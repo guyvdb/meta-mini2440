@@ -1,0 +1,21 @@
+From: Juergen Beisert <jbe@pengutronix.de>
+Subject: s3c2410fb: Don't forget to remove the device attribute
+
+Signed-off-by: Juergen Beisert <jbe@pengutronix.de>
+
+---
+ drivers/video/s3c2410fb.c |    1 +
+ 1 file changed, 1 insertion(+)
+
+Index: linux-3.2/drivers/video/s3c2410fb.c
+===================================================================
+--- linux-3.2.orig/drivers/video/s3c2410fb.c
++++ linux-3.2/drivers/video/s3c2410fb.c
+@@ -1043,6 +1043,7 @@ static int __devexit s3c2410fb_remove(st
+ 	iounmap(info->io);
+ 
+ 	release_mem_region(info->mem->start, resource_size(info->mem));
++	device_remove_file(&pdev->dev, &dev_attr_debug);
+ 
+ 	platform_set_drvdata(pdev, NULL);
+ 	framebuffer_release(fbinfo);

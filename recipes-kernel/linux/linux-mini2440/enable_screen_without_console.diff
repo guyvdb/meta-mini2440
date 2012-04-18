@@ -1,0 +1,25 @@
+From: Juergen Beisert <jbe@pengutronix.de>
+Subject: Enable display even without graphics console
+
+If no graphics console is enabled the LCD gets not activated otherwise.
+
+Signed-off-by: Juergen Beisert <jbe@pengutronix.de>
+
+---
+ drivers/video/s3c2410fb.c |    3 +++
+ 1 file changed, 3 insertions(+)
+
+Index: linux-3.2/drivers/video/s3c2410fb.c
+===================================================================
+--- linux-3.2.orig/drivers/video/s3c2410fb.c
++++ linux-3.2/drivers/video/s3c2410fb.c
+@@ -982,6 +982,9 @@ static int __devinit s3c24xxfb_probe(str
+ 		dev_err(&pdev->dev, "failed to add debug attribute\n");
+ 	}
+ #endif
++#ifndef CONFIG_FRAMEBUFFER_CONSOLE
++	s3c2410fb_set_par(fbinfo);
++#endif
+ 	pr_info("fb%d: %s frame buffer device\n",
+ 		fbinfo->node, fbinfo->fix.id);
+ 

@@ -1,0 +1,41 @@
+Author: Juergen Beisert <jbe@pengutronix.de>
+Subject: Handle the visible size of a display in the kernel
+
+Instead of guessing the visible size of the graphic area at
+run-time, set it up in the kernel with the data from its datasheet
+
+Signed-off-by: Juergen Beisert <jbe@pengutronix.de>
+
+---
+ arch/arm/plat-samsung/include/plat/fb-s3c2410.h |    2 ++
+ drivers/video/s3c2410fb.c                       |    4 ++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+Index: linux-3.2/arch/arm/plat-samsung/include/plat/fb-s3c2410.h
+===================================================================
+--- linux-3.2.orig/arch/arm/plat-samsung/include/plat/fb-s3c2410.h
++++ linux-3.2/arch/arm/plat-samsung/include/plat/fb-s3c2410.h
+@@ -33,6 +33,8 @@ struct s3c2410fb_display {
+ 	unsigned short xres;
+ 	unsigned short yres;
+ 	unsigned short bpp;
++	unsigned int phys_width; /* visible width in [mm] */
++	unsigned int phys_height; /* visible height in [mm] */
+ 
+ 	unsigned pixclock;		/* pixclock in picoseconds */
+ 	unsigned short left_margin;  /* value in pixels (TFT) or HCLKs (STN) */
+Index: linux-3.2/drivers/video/s3c2410fb.c
+===================================================================
+--- linux-3.2.orig/drivers/video/s3c2410fb.c
++++ linux-3.2/drivers/video/s3c2410fb.c
+@@ -151,8 +151,8 @@ static int s3c2410fb_check_var(struct fb
+ 	/* it is always the size as the display */
+ 	var->xres_virtual = display->xres;
+ 	var->yres_virtual = display->yres;
+-	var->height = display->height;
+-	var->width = display->width;
++	var->height = display->phys_height;
++	var->width = display->phys_width;
+ 
+ 	/* copy lcd settings */
+ 	var->pixclock = display->pixclock;

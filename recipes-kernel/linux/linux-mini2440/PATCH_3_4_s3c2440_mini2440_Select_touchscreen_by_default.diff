@@ -1,0 +1,20 @@
+From: Marek Belisko <marek.belisko@open-nandra.com>
+Subject: [PATCH 3/4] s3c2440: mini2440: Select touchscreen by default.
+
+Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
+---
+ arch/arm/mach-s3c2440/Kconfig |    1 +
+ 1 file changed, 1 insertion(+)
+
+Index: linux-3.2/arch/arm/mach-s3c2440/Kconfig
+===================================================================
+--- linux-3.2.orig/arch/arm/mach-s3c2440/Kconfig
++++ linux-3.2/arch/arm/mach-s3c2440/Kconfig
+@@ -182,6 +182,7 @@ config MACH_MINI2440
+ 	select LEDS_TRIGGER_BACKLIGHT
+ 	select S3C_DEV_NAND
+ 	select S3C_DEV_USB_HOST
++	select TOUCHSCREEN_S3C2410
+ 	help
+ 	  Say Y here to select support for the MINI2440. Is a 10cm x 10cm board
+ 	  available via various sources. It can come with a 3.5" or 7" touch LCD.

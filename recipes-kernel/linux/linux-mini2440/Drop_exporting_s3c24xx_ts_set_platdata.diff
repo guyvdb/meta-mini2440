@@ -1,0 +1,29 @@
+From axel.lin@gmail.com Mon Feb 14 03:49:27 2011
+Subject: [PATCH] ARM: SAMSUNG: Drop exporting s3c24xx_ts_set_platdata
+
+s3c24xx_ts_set_platdata is annotated __init and not used by any module,
+thus don't export it.
+This patch fixes below warning:
+
+WARNING: arch/arm/plat-samsung/built-in.o(__ksymtab+0x90): Section mismatch in reference from the variable __ksymtab_s3c24xx_ts_set_platdata to the function .init.text:s3c24xx_ts_set_platdata()
+The symbol s3c24xx_ts_set_platdata is exported and annotated __init
+Fix this by removing the __init annotation of s3c24xx_ts_set_platdata or drop the export.
+
+Signed-off-by: Axel Lin <axel.lin@gmail.com>
+---
+ arch/arm/plat-samsung/dev-ts.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+Index: linux-3.1/arch/arm/plat-samsung/dev-ts.c
+===================================================================
+--- linux-3.1.orig/arch/arm/plat-samsung/dev-ts.c
++++ linux-3.1/arch/arm/plat-samsung/dev-ts.c
+@@ -43,7 +43,7 @@ struct platform_device s3c_device_ts = {
+ 	.resource	= s3c_ts_resource,
+ };
+ 
+-void __init s3c24xx_ts_set_platdata(struct s3c2410_ts_mach_info *pd)
++void __devinit s3c24xx_ts_set_platdata(struct s3c2410_ts_mach_info *pd)
+ {
+ 	s3c_set_platdata(pd, sizeof(struct s3c2410_ts_mach_info),
+ 			 &s3c_device_ts);

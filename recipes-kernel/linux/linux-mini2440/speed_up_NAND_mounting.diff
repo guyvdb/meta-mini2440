@@ -1,0 +1,32 @@
+From: Juergen Beisert <jbe@pengutronix.de>
+Subject: Speed up detecting the NAND
+
+It makes no sense to instruct the MTD framework to make use of the in flash
+bad block table and then also add the flag to skip its search. This ends up
+in scanning all page's OOB to get the bad block info again and again. And it
+will slow down the start up process instead of shorten it (as the comment
+suggests).
+
+Signed-off-by: Juergen Beisert <jbe@pengutronix.de>
+---
+ drivers/mtd/nand/s3c2410.c |    5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+Index: linux-3.2/drivers/mtd/nand/s3c2410.c
+===================================================================
+--- linux-3.2.orig/drivers/mtd/nand/s3c2410.c
++++ linux-3.2/drivers/mtd/nand/s3c2410.c
+@@ -867,11 +867,10 @@ static void s3c2410_nand_init_chip(struc
+ 	}
+ 
+ 	/* If you use u-boot BBT creation code, specifying this flag will
+-	 * let the kernel fish out the BBT from the NAND, and also skip the
+-	 * full NAND scan that can take 1/2s or so. Little things... */
++	 * let the kernel fish out the BBT from the NAND.
++	 */
+ 	if (set->flash_bbt) {
+ 		chip->bbt_options |= NAND_BBT_USE_FLASH;
+-		chip->options |= NAND_SKIP_BBTSCAN;
+ 	}
+ }
+ 

@@ -1,0 +1,40 @@
+From: Juergen Beisert <jbe@pengutronix.de>
+Subject: Do not register more GPIOs the Soc supports
+
+This patch avoids the following kernel message:
+
+     gpiochip_add: gpios 288..303 (GPIOK) failed to register
+     gpiochip_add: gpios 320..334 (GPIOL) failed to register
+     gpiochip_add: gpios 352..353 (GPIOM) failed to register
+
+Note: This is a hack and valid only for the mini2440.
+
+Signed-off-by: Juergen Beisert <jbe@pengutronix.de>
+
+---
+ arch/arm/plat-s3c24xx/gpiolib.c |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+Index: linux-3.1/arch/arm/plat-s3c24xx/gpiolib.c
+===================================================================
+--- linux-3.1.orig/arch/arm/plat-s3c24xx/gpiolib.c
++++ linux-3.1/arch/arm/plat-s3c24xx/gpiolib.c
+@@ -180,7 +180,9 @@ struct s3c_gpio_chip s3c24xx_gpios[] = {
+ 			.label			= "GPIOJ",
+ 			.ngpio			= 16,
+ 		},
+-	}, {
++	},
++#ifndef CONFIG_ARCH_S3C2410
++	{
+ 		.base	= S3C2443_GPKCON,
+ 		.pm	= __gpio_pm(&s3c_gpio_pm_2bit),
+ 		.chip	= {
+@@ -208,6 +210,7 @@ struct s3c_gpio_chip s3c24xx_gpios[] = {
+ 			.ngpio			= 2,
+ 		},
+ 	},
++#endif
+ };
+ 
+ 

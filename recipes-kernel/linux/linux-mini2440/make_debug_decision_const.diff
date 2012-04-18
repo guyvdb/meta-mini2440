@@ -1,0 +1,66 @@
+From: Juergen Beisert <jbe@pengutronix.de>
+Subject: Remove useless code if debug is not enabled
+
+If one do not want to debug something, why still providing the code to do so?
+
+Signed-off-by: Juergen Beisert <jbe@pengutronix.de>
+
+---
+ drivers/video/s3c2410fb.c |   10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+Index: linux-3.2/drivers/video/s3c2410fb.c
+===================================================================
+--- linux-3.2.orig/drivers/video/s3c2410fb.c
++++ linux-3.2/drivers/video/s3c2410fb.c
+@@ -45,7 +45,7 @@
+ #ifdef CONFIG_FB_S3C2410_DEBUG
+ static int debug	= 1;
+ #else
+-static int debug	= 0;
++static const int debug	= 0;
+ #endif
+ 
+ #define dprintk(msg...)	if (debug) { printk(KERN_DEBUG "s3c2410fb: " msg); }
+@@ -583,6 +583,7 @@ static int s3c2410fb_blank(int blank_mod
+ 	return 0;
+ }
+ 
++#ifdef CONFIG_FB_S3C2410_DEBUG
+ static int s3c2410fb_debug_show(struct device *dev,
+ 				struct device_attribute *attr, char *buf)
+ {
+@@ -612,6 +613,7 @@ static int s3c2410fb_debug_store(struct 
+ }
+ 
+ static DEVICE_ATTR(debug, 0666, s3c2410fb_debug_show, s3c2410fb_debug_store);
++#endif
+ 
+ static struct fb_ops s3c2410fb_ops = {
+ 	.owner		= THIS_MODULE,
+@@ -973,12 +975,13 @@ static int __devinit s3c24xxfb_probe(str
+ 		goto free_cpufreq;
+ 	}
+ 
++#ifdef CONFIG_FB_S3C2410_DEBUG
+ 	/* create device files */
+ 	ret = device_create_file(&pdev->dev, &dev_attr_debug);
+ 	if (ret) {
+ 		printk(KERN_ERR "failed to add debug attribute\n");
+ 	}
+-
++#endif
+ 	printk(KERN_INFO "fb%d: %s frame buffer device\n",
+ 		fbinfo->node, fbinfo->fix.id);
+ 
+@@ -1043,8 +1046,9 @@ static int __devexit s3c2410fb_remove(st
+ 	iounmap(info->io);
+ 
+ 	release_mem_region(info->mem->start, resource_size(info->mem));
++#ifdef CONFIG_FB_S3C2410_DEBUG
+ 	device_remove_file(&pdev->dev, &dev_attr_debug);
+-
++#endif
+ 	platform_set_drvdata(pdev, NULL);
+ 	framebuffer_release(fbinfo);
+ 

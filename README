@@ -1,0 +1,12 @@
+Mini2440 BSP Meta Repository for OpenEmbedded
+===============================================
+
+WORKING
+----------------
+ * Linux 3.2.6 Kernel is building and running
+
+
+TODO
+----------------
+ * Problem with virtual terminals 
+ * dm9000 not working correctly yet

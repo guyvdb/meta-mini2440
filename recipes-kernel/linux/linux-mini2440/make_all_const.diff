@@ -1,0 +1,21 @@
+Nobody changes these variables afterwards. Make them 'const' to show it.
+---
+ drivers/mtd/nand/s3c2410.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+Index: linux-3.2/drivers/mtd/nand/s3c2410.c
+===================================================================
+--- linux-3.2.orig/drivers/mtd/nand/s3c2410.c
++++ linux-3.2/drivers/mtd/nand/s3c2410.c
+@@ -49,9 +49,9 @@
+ #include <plat/nand.h>
+ 
+ #ifdef CONFIG_MTD_NAND_S3C2410_HWECC
+-static int hardware_ecc = 1;
++static const int hardware_ecc = 1;
+ #else
+-static int hardware_ecc = 0;
++static const int hardware_ecc = 0;
+ #endif
+ 
+ #ifdef CONFIG_MTD_NAND_S3C2410_CLKSTOP

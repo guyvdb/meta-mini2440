@@ -1,0 +1,59 @@
+From: Juergen Beisert <jbe@pengutronix.de>
+Subject: s3c2410fb: Just clean up the file
+
+Signed-off-by: Juergen Beisert <jbe@pengutronix.de>
+
+---
+ drivers/video/s3c2410fb.c |   12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+Index: linux-3.2/drivers/video/s3c2410fb.c
+===================================================================
+--- linux-3.2.orig/drivers/video/s3c2410fb.c
++++ linux-3.2/drivers/video/s3c2410fb.c
+@@ -921,7 +921,7 @@ static int __devinit s3c24xxfb_probe(str
+ 
+ 	info->clk = clk_get(NULL, "lcd");
+ 	if (IS_ERR(info->clk)) {
+-		printk(KERN_ERR "failed to get lcd clock source\n");
++		dev_err(&pdev->dev, "failed to get lcd clock source\n");
+ 		ret = PTR_ERR(info->clk);
+ 		goto release_irq;
+ 	}
+@@ -947,7 +947,7 @@ static int __devinit s3c24xxfb_probe(str
+ 	/* Initialize video memory */
+ 	ret = s3c2410fb_map_video_memory(fbinfo);
+ 	if (ret) {
+-		printk(KERN_ERR "Failed to allocate video RAM: %d\n", ret);
++		dev_err(&pdev->dev, "Failed to allocate video RAM: %d\n", ret);
+ 		ret = -ENOMEM;
+ 		goto release_clock;
+ 	}
+@@ -970,7 +970,7 @@ static int __devinit s3c24xxfb_probe(str
+ 
+ 	ret = register_framebuffer(fbinfo);
+ 	if (ret < 0) {
+-		printk(KERN_ERR "Failed to register framebuffer device: %d\n",
++		dev_err(&pdev->dev, "Failed to register framebuffer device: %d\n",
+ 			ret);
+ 		goto free_cpufreq;
+ 	}
+@@ -979,15 +979,15 @@ static int __devinit s3c24xxfb_probe(str
+ 	/* create device files */
+ 	ret = device_create_file(&pdev->dev, &dev_attr_debug);
+ 	if (ret) {
+-		printk(KERN_ERR "failed to add debug attribute\n");
++		dev_err(&pdev->dev, "failed to add debug attribute\n");
+ 	}
+ #endif
+-	printk(KERN_INFO "fb%d: %s frame buffer device\n",
++	pr_info("fb%d: %s frame buffer device\n",
+ 		fbinfo->node, fbinfo->fix.id);
+ 
+ 	return 0;
+ 
+- free_cpufreq:
++free_cpufreq:
+ 	s3c2410fb_cpufreq_deregister(info);
+ free_video_memory:
+ 	s3c2410fb_unmap_video_memory(fbinfo);
